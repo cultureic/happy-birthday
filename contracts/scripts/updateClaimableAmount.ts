@@ -6,11 +6,11 @@ async function main() {
   console.log("Updating claimable amount with the account:", deployer.address);
   
   // Replace this with your deployed contract address
-  const contractAddress = "0x74d260A43425a61e732fc6E2132373A707Abf1C0";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   
   // Replace this with the new amount you want to set (in USDC units with 6 decimals)
   // Example: 5 USDC = 5000000
-  const newClaimableAmount = 2000000n;
+  const newClaimableAmount = 20000000;
   
   // Get contract instance
   const SelfHappyBirthdayFactory = await ethers.getContractFactory("SelfHappyBirthday");

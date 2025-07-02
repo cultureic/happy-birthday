@@ -1,160 +1,114 @@
-It's your birthday? Prove it and get $100!
+export const readme_es = `
+¿Es tu cumpleaños? ¡Pruébalo y recibe $100!
 
-# Happy Birthday
+🎉 Feliz Cumpleaños
+Este proyecto ofrece un contrato inteligente y una interfaz sencilla para distribuir USDC a personas en su cumpleaños, como ejemplo claro de integración con Self. El contrato verifica la fecha de nacimiento en el pasaporte del usuario y permite reclamar USDC si su cumpleaños cae dentro de ±1 día respecto a la fecha actual. La interfaz permite interactuar con esta funcionalidad.
 
-This project provides a simple contract and frontend for distributing USDC to people on their birthdays, serving as a straightforward example of integrating Self.
-This example introduces a contract that verifies a user's passport birthday and allows them to claim USDC if their date of birth is within ±1 day of the current date, along with a frontend that integrates this functionality.
+📦 Instrucciones de Configuración
+🔧 Requisitos Previos
+- Node.js y Yarn instalados
+- Se recomienda instalar ngrok para probar localmente la interfaz
+- Billetera con fondos en Celo Alfajores testnet (usa el faucet de Celo)
+- USDC de prueba (obténlo en el faucet de Circle)
 
-## Setup Instructions
+🚀 Desplegar el Contrato
+1. Ve al directorio de contratos:
 
-### Prerequisites
-
-- Node.js and Yarn installed
-- It is recommended to install [ngrok](https://ngrok.com/) before starting, which will be useful for testing the frontend locally.
-- A funded wallet on Celo Alfajores testnet (for deployment - get from [Celo faucet](https://faucet.celo.org))
-- Test USDC to distribute (get from [Circle faucet](https://faucet.circle.com/))
-
-### Deploying the Contract
-
-1. Navigate to the contracts directory:
-   ```bash
    cd contracts
-   ```
 
-2. Install dependencies:
-   ```bash
+2. Instala dependencias:
+
    yarn install
-   ```
 
-3. Configure environment variables:
-   - Copy `.env.example` to `.env` (or create a new `.env` file)
-   - Add the following required values:
-   ```env
-   # Private key for deployment (without 0x prefix)
-   CELO_ALFAJORES_KEY=your_private_key_here
-   
-   # Celoscan API key for contract verification (optional but recommended)
-   CELOSCAN_API_KEY=your_celoscan_api_key_here
-   ```
+3. Configura variables de entorno:
 
-4. Build the contracts (from the contracts directory):
-   ```bash
+   Copia .env.example a .env  
+   Añade los siguientes valores:
+   CELO_ALFAJORES_KEY=tu_clave_privada  
+   CELOSCAN_API_KEY=tu_api_key (opcional pero recomendado)
+
+4. Compila los contratos:
+
    yarn run build
-   ```
 
-5. Configure the passport environment in `contracts/scripts/hardhat/deployHappyBirthday.ts`:
-   - For **mock passports** (testing/development):
-     ```javascript
+5. Configura el entorno en contracts/scripts/hardhat/deployHappyBirthday.ts:
+   - Para pasaportes falsos:
      devMode: true,
-     ofacEnabled: [false, false, false], // Disable OFAC for mock passports
-     ```
-   - For **real passports** (production):
-     ```javascript
+     ofacEnabled: [false, false, false]
+   - Para producción:
      devMode: false,
-     ofacEnabled: [true, true, true], // Enable OFAC for real passports
-     ```
+     ofacEnabled: [true, true, true]
 
-6. Deploy the contracts:
-   ```bash
-   # For testnet (Celo Alfajores)
-   yarn deploy:alfajores
-   
-   # For mainnet (Celo)
-   yarn deploy:celo
-   ```
-   
-   After deployment, note the deployed contract address from the output.
+6. Despliega el contrato:
 
-### Setting Up the Frontend
+   yarn deploy:alfajores  // testnet  
+   yarn deploy:celo       // mainnet
 
-1. Navigate to the frontend directory:
-   ```bash
+Guarda la dirección del contrato desplegado.
+
+🌐 Configurar la Interfaz
+1. Ve al directorio de frontend:
+
    cd frontend
-   ```
 
-2. Install dependencies:
-   ```bash
+2. Instala dependencias:
+
    yarn install
-   ```
 
-3. Update the contract address:
-   - Open `frontend/app/page.tsx`
-   - Find the `HAPPY_BIRTHDAY_CONTRACT_ADDRESS` constant near the top
-   - Replace it with your newly deployed contract address:
-   ```javascript
-   const HAPPY_BIRTHDAY_CONTRACT_ADDRESS = "0xYourDeployedContractAddress";
-   ```
+3. Actualiza la dirección del contrato:
 
-4. Start the development server (from the frontend directory):
-   ```bash
+   Abre frontend/app/page.tsx  
+   Busca la constante HAPPY_BIRTHDAY_CONTRACT_ADDRESS  
+   Reemplaza con tu dirección desplegada
+
+4. Inicia el servidor local:
+
    yarn dev
-   ```
 
-5. **Important**: Fund the deployed contract with USDC:
-   - The contract needs USDC to distribute to eligible users
-   - Send test USDC to your deployed contract address
-   - You can get test USDC from the [Circle faucet](https://faucet.circle.com/)
+🔔 Importante: Envía USDC de prueba al contrato desplegado para que pueda distribuirlo
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+💡 Abre http://localhost:3000 en tu navegador para ver la app
 
-## Important Notes
+📝 Notas Importantes
+✅ Verificación de Cumpleaños
+- Reclamos válidos si el cumpleaños es ±1 día de la fecha actual
+- Ejemplo: Si hoy es 14 de junio, puedes reclamar si naciste el 13, 14 o 15
 
-### Birthday Verification Window
-- The contract allows claims if your passport birthday is within ±1 day of the current date
-- This accounts for timezone differences
-- Example: If today is June 14, you can claim if your birthday is June 13, 14, or 15
+🧪 Pruebas con Pasaportes Falsos
+- Asegúrate de que OFAC esté desactivado
+- Puedes configurar cualquier cumpleaños
 
-### Mock Passport Testing
-- When using mock passports, make sure OFAC is disabled in the deployment script
-- Mock passports are pre-configured test passports provided by Self protocol
-- You can set any birthday when creating a mock passport for testing
+🔐 Sistema de Nullifier
+- Cada identidad solo puede reclamar una vez
+- Se usa un nullifier para evitar dobles reclamos
+- Aunque uses diferentes pasaportes falsos, si representan la misma persona, no podrán reclamar dos veces
 
-### Nullifier System
-- Each passport can only claim once (ever)
-- The system uses nullifiers to prevent double claims
-- Even with different mock passports, if they represent the same person, they cannot claim twice
+🛠️ Solución de Problemas
+- "OFAC verification failed": Usa pasaportes falsos y OFAC está activado → desactiva ofacEnabled
+- "Birthday is not within the valid window": Usa un pasaporte con la fecha de hoy
+- "Insufficient funds": El contrato no tiene USDC suficiente → envía más
+- "Nullifier already used": Esa identidad ya reclamó
 
-### Troubleshooting
+📁 Scripts de Frontend
 
-1. **"OFAC verification failed" error**:
-   - This happens when using mock passports with OFAC enabled
-   - Redeploy with `ofacEnabled: [false, false, false]`
+Asegúrate que package.json incluya:
 
-2. **"Birthday is not within the valid window" error**:
-   - Your passport birthday must be within ±1 day of today
-   - For testing, create a mock passport with today's date as birthday
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
+}
 
-3. **"Insufficient funds" error**:
-   - The contract doesn't have enough USDC
-   - Send more test USDC to the contract address
+⚙️ Configuración del Contrato
+- claimableAmount: Monto a reclamar (default: 100 USDC)
+- devMode: Activar soporte de pasaportes falsos
+- ofacEnabled: Revisión OFAC por operación
+- birthdayRange: Días antes/después del cumpleaños válidos (default: 1)
 
-4. **"Nullifier already used" error**:
-   - This passport (or identity) has already claimed
-   - Each person can only claim once
-
-5. **Frontend shows contract scripts in package.json**:
-   - Make sure the frontend `package.json` has Next.js scripts:
-   ```json
-   "scripts": {
-     "dev": "next dev",
-     "build": "next build",
-     "start": "next start",
-     "lint": "next lint"
-   }
-   ```
-
-## Contract Configuration
-
-The contract supports several configuration options during deployment:
-
-- `claimableAmount`: Amount of USDC each person can claim (default: 100 USDC)
-- `devMode`: Enable/disable mock passport support
-- `ofacEnabled`: Array of booleans for OFAC checking on different operations
-- `birthdayRange`: Number of days before/after birthday to allow claims (default: 1)
-
-## Security Considerations
-
-- Always enable OFAC checking for production deployments
-- The contract owner can withdraw unclaimed funds
-- Each passport/identity can only claim once due to the nullifier system
-- The contract uses Self protocol's zero-knowledge proofs to verify passport data without exposing personal information
+🔒 Seguridad
+- Siempre habilitar OFAC en producción
+- El owner puede retirar fondos no reclamados
+- Cada identidad puede reclamar solo una vez
+- Se usa ZK de Self para verificar sin exponer datos personales
+`;

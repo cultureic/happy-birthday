@@ -9,8 +9,9 @@ import { ethers } from 'ethers';
 const HAPPY_BIRTHDAY_CONTRACT_ADDRESS = "0x97d01A133c9Bfd77D6b7147d36bAA005b48735aa";
 
 function Birthday() {
-    const [input, setInput] = useState('');
-    const [address, setAddress] = useState('');
+    //replace address with yours or in input UX
+    const [input, setInput] = useState('0x9f42Caf52783EF12d8174d33c281a850b8eA58aD');
+    const [address, setAddress] = useState('0x9f42Caf52783EF12d8174d33c281a850b8eA58aD');
 
     const [claimSuccess, setClaimSuccess] = useState(false);
     const [txHash, setTxHash] = useState<string | null>(null);
@@ -27,7 +28,6 @@ function Birthday() {
         scope: "Self-Birthday-Example",
         endpoint: HAPPY_BIRTHDAY_CONTRACT_ADDRESS,
         endpointType: "staging_celo",
-        logoBase64: logo,
         userId: address,
         userIdType: "hex",
         disclosures: {
